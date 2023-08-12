@@ -1,36 +1,40 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import { UploadIcon } from '@/svgs/icons';
-
-import { UploadCloudIcon } from 'lucide-react';
-import { CldUploadButton } from 'next-cloudinary';
 import React from 'react';
+import UploadBtn from '../../../components/Cloudinary/upload-button';
+import cloudinary from 'cloudinary';
+import { CloudinaryImage } from '@/components/Cloudinary/cloudinary-image';
 
-const Page = () => {
+export type SearchResult = {
+  public_id: string;
+  tags: string[];
+};
+
+const Page = async () => {
+  const results = (await cloudinary.v2.search
+    .expression('resource_type:image ')
+    .sort_by('created_at', 'desc')
+    .with_field('tags')
+    .max_results(10)
+    .execute()) as { resources: SearchResult[] };
+
   return (
-    <section>
-      <div>
-        <div className='flex items-center justify-between mb-4'>
-          <h1 className='text-4xl font-bold text-gray-800 dark:text-gray-100'>
-            Gallery
-          </h1>
+    <section className='flex flex-col gap-8'>
+      <div className='flex items-center justify-between mb-4'>
+        <h1 className='text-4xl font-bold text-gray-800 dark:text-gray-100'>
+          Gallery
+        </h1>
 
-          <div className='flex items-center gap-4'>
-            <Button asChild>
-              <div className='flex items-center gap-2'>
-                <UploadIcon />
-                <CldUploadButton
-                  uploadPreset='link-sharing'
-                  onUpload={(result: any) => {
-                    if (result.event === 'success') {
-                      console.log(result.info.public_id);
-                    }
-                  }}
-                />
-              </div>
-            </Button>
-          </div>
-        </div>
+        <UploadBtn />
+      </div>
+      <div className='grid grid-cols-4 gap-4 border-red-500'>
+        {results?.resources.map(result => (
+          <CloudinaryImage
+            key={result.public_id}
+            imagedata={result}
+            alt='gallery'
+            width='400'
+            height='300'
+          />
+        ))}
       </div>
     </section>
   );
