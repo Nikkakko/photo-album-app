@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Pencil } from 'lucide-react';
 import { FolderPlusIcon, MenuIcon } from '@/svgs/icons';
 import { SearchResult } from '@/types';
+import AddToAlbum from '../AddToAlbum';
 
 export function ImageMenu({ image }: { image: SearchResult }) {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ export function ImageMenu({ image }: { image: SearchResult }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-40'>
           <DropdownMenuItem asChild>
-            {/* <AddToAlbumDialog image={image} onClose={() => setOpen(false)} /> */}
+            <AddToAlbum image={image} onClose={() => setOpen(false)} />
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Button
