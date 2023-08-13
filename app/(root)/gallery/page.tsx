@@ -1,12 +1,8 @@
 import React from 'react';
 import UploadBtn from '../../../components/Cloudinary/upload-button';
 import cloudinary from 'cloudinary';
-import { CloudinaryImage } from '@/components/Cloudinary/cloudinary-image';
-
-export type SearchResult = {
-  public_id: string;
-  tags: string[];
-};
+import { SearchResult } from '@/types';
+import GalleryGrid from '@/components/shared/gallery-grid';
 
 const Page = async () => {
   const results = (await cloudinary.v2.search
@@ -25,17 +21,8 @@ const Page = async () => {
 
         <UploadBtn />
       </div>
-      <div className='grid grid-cols-4 gap-4 border-red-500'>
-        {results?.resources.map(result => (
-          <CloudinaryImage
-            key={result.public_id}
-            imagedata={result}
-            alt='gallery'
-            width='400'
-            height='300'
-          />
-        ))}
-      </div>
+
+      <GalleryGrid images={results.resources} />
     </section>
   );
 };

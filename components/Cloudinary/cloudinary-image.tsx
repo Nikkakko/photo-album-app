@@ -3,7 +3,8 @@ import { useTransition, useState } from 'react';
 import { FullHeartIcon, HeartIcon } from '@/svgs/icons';
 import { CldImage, CldImageProps } from 'next-cloudinary';
 import { setAsFavoriteAction } from '@/lib/actions/cloudinary.actions';
-import { SearchResult } from '@/app/(root)/gallery/page';
+import { SearchResult } from '@/types';
+import { ImageMenu } from '../shared/image-menu';
 
 export function CloudinaryImage(
   props: {
@@ -14,31 +15,41 @@ export function CloudinaryImage(
   const [transition, startTransition] = useTransition();
   const { imagedata, onUnheart } = props;
 
-  const isFavorite = imagedata.tags.includes('favorite');
+  const [isFavorited, setIsFavorited] = useState(
+    imagedata.tags.includes('favorite')
+  );
+
+  const handleOnClick = (publicId: string, isFavorited: boolean) => {
+    startTransition(() => {
+      if (!isFavorited) {
+        onUnheart?.(imagedata);
+      }
+      setIsFavorited(isFavorited);
+      setAsFavoriteAction(publicId, isFavorited);
+    });
+  };
 
   return (
     <div className='relative'>
       <CldImage {...props} src={imagedata.public_id} />
 
-      {isFavorite ? (
+      {isFavorited ? (
         <FullHeartIcon
           className='absolute top-2 left-2 hover:text-white text-red-500 cursor-pointer'
           onClick={() => {
-            startTransition(() => {
-              setAsFavoriteAction(imagedata.public_id, false);
-            });
+            handleOnClick(imagedata.public_id, false);
           }}
         />
       ) : (
         <HeartIcon
-          className='absolute top-2 right-2 cursor-pointer hover:text-red-500'
+          className='absolute top-2 left-2 cursor-pointer hover:text-red-500'
           onClick={() => {
-            startTransition(() => {
-              setAsFavoriteAction(imagedata.public_id, true);
-            });
+            handleOnClick(imagedata.public_id, true);
           }}
         />
       )}
+
+      <ImageMenu image={imagedata} />
     </div>
   );
 }

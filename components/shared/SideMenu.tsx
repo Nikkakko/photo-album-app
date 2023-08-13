@@ -1,8 +1,11 @@
+'use client';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { sidebarLinks } from '@/constants';
+import { usePathname } from 'next/navigation';
 
-async function SideMenu() {
+function SideMenu() {
+  const pathname = usePathname();
   return (
     <div className='pb-12 w-1/5'>
       <div className='space-y-4 py-4'>
@@ -11,19 +14,25 @@ async function SideMenu() {
             Manage
           </h2>
           <div className='space-y-1'>
-            {sidebarLinks.map(link => (
-              <Button
-                asChild
-                variant='ghost'
-                className='w-full justify-start flex gap-2'
-                key={link.id}
-              >
-                <Link href={link.route}>
-                  <link.icon />
-                  {link.label}
-                </Link>
-              </Button>
-            ))}
+            {sidebarLinks.map(link => {
+              const isActive = pathname === link.route;
+
+              return (
+                <Button
+                  asChild
+                  variant='ghost'
+                  className={`w-full justify-start flex gap-2
+                    ${isActive ? 'bg-gray-800 ' : ''}
+                  `}
+                  key={link.id}
+                >
+                  <Link href={link.route}>
+                    <link.icon />
+                    {link.label}
+                  </Link>
+                </Button>
+              );
+            })}
           </div>
         </div>
       </div>
