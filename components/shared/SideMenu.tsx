@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 
 function SideMenu() {
   const pathname = usePathname();
+
   return (
     <div className='pb-12 w-1/5'>
       <div className='space-y-4 py-4'>

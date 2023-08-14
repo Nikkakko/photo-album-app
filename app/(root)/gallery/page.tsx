@@ -3,10 +3,15 @@ import UploadBtn from '../../../components/Cloudinary/upload-button';
 import cloudinary from 'cloudinary';
 import { SearchResult } from '@/types';
 import GalleryGrid from '@/components/shared/gallery-grid';
+import SearchForm from '@/components/shared/SearchForm';
 
-const Page = async () => {
+const Page = async ({
+  searchParams: { search },
+}: {
+  searchParams: { search: string };
+}) => {
   const results = (await cloudinary.v2.search
-    .expression('resource_type:image ')
+    .expression(`resource_type:image${search ? ` AND tags=${search}` : ''}`)
     .sort_by('created_at', 'desc')
     .with_field('tags')
     .max_results(10)
@@ -21,6 +26,8 @@ const Page = async () => {
 
         <UploadBtn />
       </div>
+
+      <SearchForm initialsearch={search} />
 
       <GalleryGrid images={results.resources} />
     </section>
