@@ -12,7 +12,13 @@ const Header = () => {
           height='50'
           alt='icon of this photo album app'
         />
-        <h1 className='text-2xl font-bold ml-4'>Photo Album</h1>
+        <h1
+          className='text-sm font-bold ml-2 
+        md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl
+        md:ml-4 lg:ml-6 xl:ml-8 2xl:ml-10'
+        >
+          Photo Album
+        </h1>
         <div className='ml-auto flex items-center space-x-4'>
           <Avatar>
             <AvatarImage src='https://github.com/shadcn.png' />
