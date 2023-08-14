@@ -21,3 +21,25 @@ export const sidebarLinks = [
     icon: HeartIcon,
   },
 ];
+
+export const editButtons = [
+  {
+    id: 1,
+    name: 'generative-fill',
+  },
+
+  {
+    id: 2,
+    name: 'blur',
+  },
+
+  {
+    id: 3,
+    name: 'grayscale',
+  },
+
+  {
+    id: 4,
+    name: 'pixelate',
+  },
+];
